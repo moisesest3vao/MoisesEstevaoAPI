@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mensagem")
+@RequestMapping("/servico")
 public class RequisicaoServicoController {
 
     @Autowired
