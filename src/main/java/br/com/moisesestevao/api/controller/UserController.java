@@ -6,6 +6,7 @@ import br.com.moisesestevao.api.model.User;
 import br.com.moisesestevao.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +27,10 @@ public class UserController {
             return ResponseEntity.ok(new UserDto(usuario));
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new BCryptPasswordEncoder().encode("123"));
+
     }
 }

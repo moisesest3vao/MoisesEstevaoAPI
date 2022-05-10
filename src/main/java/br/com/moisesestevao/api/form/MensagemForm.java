@@ -1,17 +1,18 @@
 package br.com.moisesestevao.api.form;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class MensagemForm {
-    @NotNull
+    @NotNull @NotBlank
     private String telefone;
-    @NotNull
+    @NotNull @NotBlank
     private String email;
-    @NotNull
+    @NotNull @NotBlank
     private String nome;
-    @NotNull
+    @NotNull @NotBlank
     private String assunto;
-    @NotNull
+    @NotNull @NotBlank
     private String mensagem;
 
     public String getTelefone() {

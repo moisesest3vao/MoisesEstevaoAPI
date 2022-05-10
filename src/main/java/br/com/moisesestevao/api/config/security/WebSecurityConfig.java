@@ -18,10 +18,19 @@ import br.com.moisesestevao.api.config.security.filter.TokenAuthenticationFilter
 import br.com.moisesestevao.api.config.security.service.AuthenticationService;
 import br.com.moisesestevao.api.config.security.service.TokenService;
 import br.com.moisesestevao.api.repository.UserRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
 	@Autowired
 	AuthenticationService authenticationService;
@@ -37,7 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
-	
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("*");
+    }
+
     //configuração de url
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -46,7 +60,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/mensagem").permitAll()
                 .anyRequest().authenticated()
-                .and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().cors()
+                .and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new TokenAuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -57,6 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .userDetailsService(authenticationService).passwordEncoder(new BCryptPasswordEncoder());
         
     }
+
 
     //configuração de recursos (css, js, html)
     @Override
